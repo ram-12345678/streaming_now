@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translation Web App</title>
+</head>
+<body>
+    <h1>Translation Web App</h1>
+    <form id="translationForm">
+        <label for="mode">Mode:</label>
+        <select id="mode" name="mode">
+            <option value="text_to_speech">Text to Speech</option>
+            <option value="speech_to_speech">Speech to Speech</option>
+            <option value="speech_to_text">Speech to Text</option>
+            <option value="text_to_text">Text to Text</option>
+        </select>
+        <br>
+        <label for="src_lang">Source Language:</label>
+        <input type="text" id="src_lang" name="src_lang" required>
+        <br>
+        <label for="tgt_lang">Target Language:</label>
+        <input type="text" id="tgt_lang" name="tgt_lang" required>
+        <br>
+        <label for="input_text">Input Text:</label>
+        <input type="text" id="input_text" name="input_text">
+        <br>
+        <label for="input_audio_url">Input Audio URL:</label>
+        <input type="text" id="input_audio_url" name="input_audio_url">
+        <br>
+        <button type="submit">Translate</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('translationForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const mode = document.getElementById('mode').value;
+            const src_lang = document.getElementById('src_lang').value;
+            const tgt_lang = document.getElementById('tgt_lang').value;
+            const input_text = document.getElementById('input_text').value;
+            const input_audio_url = document.getElementById('input_audio_url').value;
+
+            const response = await fetch('/translate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ mode, src_lang, tgt_lang, input_text, input_audio_url })
+            });
+
+            const result = await response.json();
+            document.getElementById('result').innerText = JSON.stringify(result);
+        });
+    </script>
+</body>
+</html>
